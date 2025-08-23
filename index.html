@@ -1,221 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Loch'd In — Teen Hackathon in Edinburgh</title>
-<meta name="description" content="Loch'd In is a 12-hour teen hackathon in Edinburgh. Free, beginner-friendly, and myth-inspired. Build something weird and demo it!">
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Inter:wght@400;600;800&family=Gloria+Hallelujah&display=swap" rel="stylesheet"/>
-
-<style>
-/* =========================
-   THEME PALETTES (switchable)
-   ========================= */
-:root{
-  --bg:#0b0b10; --ink:#f4fff6; --sub:#cfeee0;
-  --a:#7cffcb; --b:#f472b6; --c:#a78bfa; --d:#60a5fa; --e:#facc15;
-  --card:#0f1113; --line:#162019; --halo:rgba(124,255,203,.35);
-  --mark:rgba(255,255,255,.14);                /* whiteboard markings */
-  --max:1080px;
-}
-:root[data-theme="tropical"]{ --bg:#0b0a12; --ink:#fffaf5; --sub:#ffe4cf; --a:#ff8a00; --b:#ff3d77; --c:#c135ff; --d:#18a0fb; --e:#00d68f; --card:#140e12; --line:#271521; --halo:rgba(255,61,119,.35); --mark:rgba(255,255,255,.14); }
-:root[data-theme="aurora"]{   --bg:#081114; --ink:#ecfffb; --sub:#c6fff2; --a:#6ef3d6; --b:#8b5cf6; --c:#22d3ee; --d:#34d399; --e:#fde047; --card:#0a1212; --line:#0f1d1a; --halo:rgba(110,243,214,.35); --mark:rgba(255,255,255,.13); }
-:root[data-theme="sunset"]{   --bg:#140c10; --ink:#fff6f0; --sub:#ffd6c7; --a:#ff7a7a; --b:#ffb86b; --c:#ffd166; --d:#6bc9ff; --e:#b692ff; --card:#1a1015; --line:#24131b; --halo:rgba(255,122,122,.35); --mark:rgba(255,255,255,.13); }
-:root[data-theme="candy"]{    --bg:#0e0a14; --ink:#fff5ff; --sub:#ffd8ff; --a:#ff66c4; --b:#7cf9ff; --c:#c0ff66; --d:#ffdd57; --e:#9b7bff; --card:#130f19; --line:#1a1322; --halo:rgba(255,102,196,.35); --mark:rgba(255,255,255,.14); }
-/* Light mode ("paper") */
-:root[data-theme="paper"]{
-  --bg:#f7fafc; --ink:#0b0d10; --sub:#475569;
-  --a:#0ea5e9; --b:#ef4444; --c:#a855f7; --d:#10b981; --e:#f59e0b;
-  --card:#ffffff; --line:#e2e8f0; --halo:rgba(14,165,233,.28); --mark:rgba(0,0,0,.22);
-}
-/* Color background ("loch" — deep kelp/teal) */
-:root[data-theme="loch"]{
-  --bg:#041f1a; --ink:#eafff6; --sub:#b7f3dd;
-  --a:#7cffcb; --b:#22d3ee; --c:#8b5cf6; --d:#34d399; --e:#fde047;
-  --card:#07241f; --line:#0c3a2f; --halo:rgba(124,255,203,.28); --mark:rgba(255,255,255,.12);
-}
-
-/* ============== Base ============== */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0; color:var(--ink);
-  font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  background: var(--bg); 
-  overflow-x:hidden;
-}
-a{color:var(--a)} a:hover{text-decoration:underline}
-
-/* Animated color mesh */
-.bg-mesh{
-  position:fixed; inset:-20% -20% -10% -20%; z-index:-4; /* behind marks */
-  filter:saturate(140%) blur(40px);
-  background:
-    radial-gradient(40% 28% at 10% 20%, color-mix(in oklab, var(--a) 35%, transparent) 0%, transparent 60%),
-    radial-gradient(35% 30% at 85% 10%, color-mix(in oklab, var(--b) 35%, transparent) 0%, transparent 60%),
-    radial-gradient(35% 35% at 50% 0%, color-mix(in oklab, var(--c) 30%, transparent) 0%, transparent 60%),
-    radial-gradient(50% 35% at 80% 80%, color-mix(in oklab, var(--d) 25%, transparent) 0%, transparent 60%),
-    radial-gradient(40% 35% at 15% 85%, color-mix(in oklab, var(--e) 20%, transparent) 0%, transparent 60%);
-  animation: drift 28s ease-in-out infinite alternate;
-}
-@keyframes drift{0%{transform:translateY(-2%) rotate(.6deg)}100%{transform:translateY(6%) rotate(-.6deg)}}
-@media (prefers-reduced-motion:reduce){ .bg-mesh{animation:none} }
-
-/* Whiteboard-like code markings */
-.marks{
-  position:fixed; inset:0; z-index:-3; /* safely behind all content */
-  pointer-events:none;
-  font-family:"Gloria Hallelujah", ui-monospace, Menlo, Consolas, monospace;
-}
-.marks span{
-  position:absolute;
-  font-size:clamp(18px, 1.4vw + 14px, 42px); /* bigger marks */
-  color:var(--mark);
-  white-space:pre; user-select:none;
-  transform:rotate(var(--r,0deg)) scale(var(--s,1));
-  will-change:opacity, transform, filter;
-  text-shadow:
-    0 0.5px 0 color-mix(in oklab, var(--mark) 60%, transparent),
-    0 -0.5px 0 color-mix(in oklab, var(--mark) 35%, transparent);
-  transition:opacity .15s linear, filter .15s linear;
-}
-@media (prefers-reduced-motion:reduce){ .marks span{ transition:none } }
-
-/* Layout / header */
-.wrap{max-width:var(--max); margin:0 auto; padding:0 18px}
-.header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(130%) blur(8px);
-  background:linear-gradient(180deg, color-mix(in oklab, var(--bg) 70%, #000 30%), color-mix(in oklab, var(--bg) 85%, transparent));
-  border-bottom:1px solid var(--line);
-}
-.nav{max-width:var(--max); margin:0 auto; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px}
-.brand{display:flex; align-items:center; gap:10px; font-weight:800}
-.brand svg{width:28px;height:28px}
-.nav a{color:var(--sub); text-decoration:none; margin-left:16px; font-weight:700; position:relative}
-.nav a::after{content:""; position:absolute; left:0; bottom:-4px; height:2px; width:0; background:linear-gradient(90deg,var(--a),var(--b),var(--c)); transition:width .2s ease}
-.nav a:hover{color:var(--ink)} .nav a:hover::after{width:100%}
-.cta{appearance:none; border:none; padding:10px 14px; border-radius:12px; font-weight:800; letter-spacing:.2px; cursor:pointer; color:var(--bg); background:linear-gradient(90deg,var(--a),var(--b)); box-shadow:0 8px 28px -12px color-mix(in oklab, var(--a) 55%, transparent);}
-
-/* Palette switcher */
-.switch{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-.swatch{width:22px;height:22px;border-radius:50%; border:2px solid #0006; cursor:pointer}
-.swatch[data-s="aurora"]{background:conic-gradient(from 120deg,#6ef3d6,#22d3ee,#34d399)}
-.swatch[data-s="tropical"]{background:conic-gradient(from 120deg,#ff3d77,#ff8a00,#18a0fb)}
-.swatch[data-s="sunset"]{background:conic-gradient(from 120deg,#ff7a7a,#ffb86b,#ffd166)}
-.swatch[data-s="candy"]{background:conic-gradient(from 120deg,#ff66c4,#7cf9ff,#c0ff66)}
-.swatch[data-s="paper"]{background:#f7fafc; border-color:#94a3b8}
-.swatch[data-s="loch"]{background:#041f1a}
-
-/* Hero */
-.hero{padding:64px 0 28px; display:grid; gap:18px}
-.kicker{display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; font-weight:800; font-size:12px; color:var(--sub); border:1px solid var(--halo); background:color-mix(in oklab, var(--bg) 85%, #fff 15%)}
-.kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--a);box-shadow:0 0 10px var(--a)}
-h1{font-family:Cinzel,serif; font-weight:900; line-height:1.02; margin:6px 0 10px; font-size:clamp(36px,6vw,72px);
-  background:linear-gradient(90deg,var(--a),var(--b),var(--c),var(--d));
-  -webkit-background-clip:text; background-clip:text; color:transparent; }
-.hero p{color:var(--sub); font-size:18px; margin:0}
-.badge{display:inline-block; padding:6px 10px; border-radius:10px; font-weight:800; color:var(--bg); background:linear-gradient(90deg,var(--d),var(--e)); margin-left:8px}
-
-/* Sections */
-section{padding:40px 0; border-top:1px solid var(--line); position:relative}
-h2{font-family:Cinzel,serif; font-size:clamp(24px,3.6vw,38px); margin:0 0 12px; letter-spacing:.2px;
-  background:linear-gradient(90deg,var(--a),var(--b),var(--c)); -webkit-background-clip:text; background-clip:text; color:transparent;}
-p{line-height:1.6}
-ul{line-height:1.7}
-
-/* Decorative waves */
-.wave{position:absolute; left:0; right:0; height:48px; pointer-events:none; opacity:.6}
-.wave.top{top:-24px; transform:scaleY(-1)}
-.wave.bottom{bottom:-24px}
-
-/* Cards (color halo) */
-.card{
-  --bd: conic-gradient(from 180deg at 50% 50%, var(--a), var(--b), var(--c), var(--d), var(--a));
-  position:relative; border-radius:16px; padding:16px; background:var(--card); isolation:isolate; border:1px solid color-mix(in oklab, var(--a) 20%, transparent);
-}
-.card::before{
-  content:""; position:absolute; inset:-1px; z-index:-1; border-radius:18px; background:var(--bd); filter:blur(12px); opacity:.35; transition:opacity .2s ease;
-}
-.card:hover::before{opacity:.75}
-@media (prefers-reduced-motion:reduce){ .card::before{filter:none} }
-
-/* Schedule */
-.schedule{display:grid; gap:10px}
-.schedule .row{display:grid; grid-template-columns:140px 1fr; gap:16px; align-items:start}
-.schedule .t{color:var(--sub); font-weight:800}
-.schedule .d{background:color-mix(in oklab, var(--bg) 85%, #000 15%); border:1px solid color-mix(in oklab, var(--a) 25%, transparent); padding:10px 12px; border-radius:10px}
-
-/* Chips */
-.chips{display:flex; flex-wrap:wrap; gap:8px}
-.chip{border:1px solid color-mix(in oklab,var(--b) 40%, transparent); padding:6px 10px; border-radius:999px; color:var(--ink); font-weight:700; background:linear-gradient(90deg,color-mix(in oklab,var(--b) 25%, transparent), transparent 70%)}
-
-/* Sponsor grid */
-/* Sponsor grid */
-.sponsors{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:16px;
-}
-
-/* Uniform tile size + hover grow + shadow */
-.sponsors .slot{
-  position:relative;
-  display:grid; place-items:center;
-  aspect-ratio: 16 / 9;                 /* uniform size */
-  min-height:110px;                      /* fallback if aspect-ratio unsupported */
-  padding:10px;
-  border-radius:14px;
-
-  background:color-mix(in oklab, var(--bg) 85%, #fff 15%);
-  border:2px dashed color-mix(in oklab, var(--c) 50%, transparent);
-  color:var(--sub); font-weight:800; text-align:center;
-
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-  will-change: transform;
-}
-
-/* Grow + shadow on hover and keyboard focus */
-.sponsors .slot:hover, 
-.sponsors .slot:focus-visible{
-  transform:scale(1.05);
-  box-shadow:
-    0 10px 28px -10px color-mix(in oklab, var(--a) 25%, transparent),
-    0 6px 16px -8px rgba(0,0,0,.35);
-  border-color: color-mix(in oklab, var(--a) 50%, transparent);
-  outline: none;
-}
-
-/* If you drop logos in as images, keep them tidy */
-.sponsors .slot > img{
-  max-width:72%;
-  max-height:70%;
-  object-fit:contain;
-  filter: contrast(1.05);
-}
-@media (prefers-reduced-motion:reduce){
-  .sponsors .slot{ transition:none }
-}
-
-/* Footer */
-footer{border-top:1px solid var(--line); padding:28px 0 60px; color:var(--sub)}
-small{color:color-mix(in oklab, var(--sub) 70%, #999 30%)}
-
-/* Reveal on scroll */
-.reveal{opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s ease}
-.reveal.show{opacity:1; transform:none}
-
-/* Utilities */
-.visually-hidden{position:absolute!important; width:1px;height:1px;margin:-1px;border:0;padding:0;clip:rect(0 0 0 0);overflow:hidden}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loch'd In — Teen Hackathon in Edinburgh</title>
+  <meta name="description" content="Loch'd In is a 12-hour teen hackathon in Edinburgh. Free, beginner-friendly, and myth-inspired." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Inter:wght@400;600;800&family=Gloria+Hallelujah&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <a href="#top" class="visually-hidden">Skip to content</a>
-<div class="bg-mesh" aria-hidden="true"></div>
-<div class="marks" aria-hidden="true" id="marks"></div>
 
+<!-- Backdrops -->
+<div class="bg-mesh" aria-hidden="true"></div>
+     <!-- optional squiggles -->
+<div class="marks" id="marks" aria-hidden="true"></div>  <!-- whiteboard code marks -->
+
+<!-- Fixed top bar -->
 <header class="header" role="banner">
-  <div class="nav">
+  <div class="nav wrap">
     <div class="brand" aria-label="Loch'd In">
       <svg viewBox="0 0 64 64" aria-hidden="true">
         <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="var(--a)"/><stop offset="1" stop-color="var(--b)"/></linearGradient></defs>
@@ -231,255 +36,135 @@ small{color:color-mix(in oklab, var(--sub) 70%, #999 30%)}
       <a href="#schedule">Schedule</a>
       <a href="#sponsors">Sponsors</a>
     </nav>
-    <div class="switch" aria-label="Color themes">
-      <button class="swatch" title="Aurora" data-s="aurora" aria-label="Aurora theme"></button>
-      <button class="swatch" title="Tropical" data-s="tropical" aria-label="Tropical theme"></button>
-      <button class="swatch" title="Sunset" data-s="sunset" aria-label="Sunset theme"></button>
-      <button class="swatch" title="Candy" data-s="candy" aria-label="Candy theme"></button>
-      <button class="swatch" title="Paper (Light)" data-s="paper" aria-label="Paper light theme"></button>
-      <button class="swatch" title="Loch (Color BG)" data-s="loch" aria-label="Loch themed background"></button>
-      <button class="cta" id="signup">Sign Up</button>
-    </div>
+    <button class="cta" id="open-register">Register</button>
   </div>
-</header> 
+</header>
 
 <!-- Hero -->
 <div class="wrap hero" id="top">
-  <span class="kicker"><span class="dot"></span> Edinburgh • 10 Hour Teen Hackathon <span class="badge">Beginner-friendly</span></span>
-  <h1>Loch’d In: A hackathon for teens</h1>
-  <p><strong><!-- TODO: set date & venue --></strong> Date September 27, 2025 • Edinburgh city centre</p>
-  <p>Build a project in a day. Demo it at night. Free, beginner-friendly, open to 13-18 year olds.</p>
+  <span class="kicker"><span class="dot"></span> Edinburgh • 10-Hour Teen Hackathon <span class="badge">Beginner-friendly</span></span>
+  <h1>Loch’d In: Myths & Makers</h1>
+  <p><strong><!-- TODO: date & venue --></strong> September 27, 2025 • Codebase Offices</p>
+  <p>Build a project in a day. Free, beginner-friendly, and open to secondary students.</p>
+  <div class="hero-cta"> 
+    <button class="cta" id="open-register-hero">Register Now</button>
+    <a class="btn ghost" href="#schedule">See schedule</a>
+  </div>
 </div>
 
 <main class="wrap" role="main">
-
-  <!-- WHAT -->
   <section id="what" class="reveal">
-    <svg class="wave top" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40c120 28 240 28 360 0s240-28 360 0 240 28 360 0 240-28 360 0v40H0Z" fill="url(#grad1)"/></svg>
     <h2>What Is Loch’d In?</h2>
-    <p class="card">Loch’d In is a 10 hour hackathon for 13-18 year olds. Team up, make something cool (apps, websites, games, hardware — your call), then show it off. The theme is “Myths, Legends, and Heroes” but it’s a prompt — not a restriction.</p>
-    <div class="chips" style="margin-top:10px" aria-label="Popular build categories">
+    <p class="card">Loch’d In is a 10-hour <em>hackathon</em> for 13-18 year olds. Team up, make something cool (apps, websites, or games) then show it off on stage. The theme is “Myths & Makers,” but it’s a prompt - not a restriction.</p>
+    <div class="chips" aria-label="Popular build categories">
       <span class="chip">Apps</span><span class="chip">Games</span><span class="chip">Web</span><span class="chip">Hardware</span><span class="chip">AI</span>
-    </div> 
-    <svg class="wave bottom" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40c120 28 240 28 360 0s240-28 360 0 240 28 360 0 240-28 360 0v40H0Z" fill="url(#grad2)"/></svg>
+    </div>
   </section>
 
-  <!-- FREE -->
   <section id="free" class="reveal">
     <h2>Is this all free?</h2>
     <div class="card">
-      <p><strong>Yes.</strong> Food, drinks, snacks, and swag are provided. Just bring a laptop and charger. Tell us about allergens or dietary requirements during sign-up and we’ll plan accordingly.</p>
+      <p><strong>Yes.</strong> Thanks to our sponsors we are able to make this event free to attend. Food, drinks, snacks, and swag are provided. Just bring a laptop and charger. Tell us about allergens or dietary requirements during sign-up and we’ll plan accordingly.</p>
     </div>
   </section>
 
-  <!-- WHO -->
   <section id="who" class="reveal">
     <h2>Who can attend?</h2>
     <div class="card">
-      <p>All secondary students. No prior experience needed — come solo or with friends. We’ll run a quick team-forming activity at kickoff for anyone who wants collaborators.</p>
+      <p>All 13-18 year olds. No prior experience needed — come solo or with friends. You can be in teams up to 4 and you will be able to form teams at the event.</p>
     </div>
   </section>
 
-  <!-- SCHEDULE -->
   <section id="schedule" class="reveal">
     <h2>Saturday — 10 hours of making</h2>
     <div class="schedule" aria-label="Event schedule">
-      <div class="row"><div class="t">9:00</div><div class="d"><strong>Doors open & Registration.</strong> Meet your fellow hackers. </div></div>
-      <div class="row"><div class="t">10:00</div><div class="d"><strong>Kickoff.</strong> What to build, safety, demo format.</div></div>
-      <div class="row"><div class="t">11:00</div><div class="d"><strong>Beginner mini-workshop 1:</strong> Ship a webpage in 45 minutes.</div></div>
-      <div class="row"><div class="t">11:45</div><div class="d"><strong>Beginner mini-workshop 2:</strong> Make your first tiny game.</div></div>
-      <div class="row"><div class="t">12:30</div><div class="d"><strong>Build time.</strong> Mentors roam; submit team + repo by 13:00.</div></div>
-      <div class="row"><div class="t">16:00</div><div class="d">Snacks & stretch. Lightning talks (3×5min).</div></div>
-      <div class="row"><div class="t">17:00</div><div class="d">Submissions due and dinner</div></div>
-      <div class="row"><div class="t">17:30</div><div class="d"><strong>Demos.</strong> 120-second pitch + 60-second Q&amp;A.</div></div>
-      <div class="row"><div class="t">18:30</div><div class="d"><strong>Awards & wrap.</strong> Group photo & goodbyes.</div></div>
-    </div>
-  </section> 
-
-  <!-- SPONSORS -->
-  <section id="sponsors" class="reveal"> 
-    <h2>This event is made possible by</h2>
-
-    <div class="card">
-      <h3 style="margin:0 0 8px">Our Sponsors</h3>
-      <div class="sponsors"> 
-        <div class="slot">Logo</div>
-        <div class="slot">Logo</div>
-        <div class="slot">Logo</div>
-        <div class="slot">Logo</div>
-      </div>
+      <div class="row"><div class="t">9:00</div><div class="d"><strong>Doors open & Registration.</strong> Meet people and start forming teams.</div></div>
+      <div class="row"><div class="t">9:30</div><div class="d"><strong>Kickoff.</strong> An official start to the day</div></div>
+      <div class="row"><div class="t">9:45</div><div class="d"><strong>Time to Code!</strong></div></div>
+      <div class="row"><div class="t">12:30</div><div class="d"><strong>Lunch break.</strong> Food, drinks, and snacks provided.</div></div>
+      <div class="row"><div class="t">17:00</div><div class="d">Submissions due. </div></div>
+      <div class="row"><div class="t">17:15</div><div class="d"><strong>Dinner break.</strong> Food, drinks, and snacks provided.</div></div>
+      <div class="row"><div class="t">18:00</div><div class="d"><strong>Demos.</strong> 120-second pitch + 60-second Q&amp;A.</div></div>
+      <div class="row"><div class="t">18:45</div><div class="d"><strong>Awards & wrap.</strong> Group photo & goodbyes.</div></div>
     </div>
   </section>
 
+  <!-- Sponsors marquee (PNG ok). base44.png set as Gold -->
+  <section id="sponsors" class="reveal" aria-labelledby="sponsors-title">
+    <h2 id="sponsors-title">Sponsors</h2>
+    <p class="muted">Thank you to our partners.</p>
+
+    <div class="band gold" aria-label="Gold sponsors">
+      <div class="track">
+        <a class="logo" href="https://base44.com" target="_blank" rel="noopener" aria-label="Base44 (Gold)">
+          <img src="base44.png" alt="Base44 logo">
+        </a>
+        <a class="logo" href="#" target="_blank" rel="noopener" aria-label="Gold Sponsor 2">
+          <img src="gold2.png" alt="Gold Sponsor 2">
+        </a>
+        <a class="logo dup" href="https://base44.com"><img src="base44.png" alt=""></a>
+        <a class="logo dup" href="#"><img src="gold2.png" alt=""></a>
+      </div>
+    </div>
+
+    <div class="band silver" aria-label="Silver sponsors">
+      <div class="track">
+        <a class="logo" href="#" aria-label="Silver Sponsor 1">
+          <img src="silver1.png" alt="Silver Sponsor 1">
+        </a>
+        <a class="logo dup" href="#"><img src="silver1.png" alt=""></a>
+      </div>
+    </div>
+
+    <div class="band bronze" aria-label="Bronze sponsors">
+      <div class="track">
+        <a class="logo" href="#" aria-label="Bronze Sponsor 1">
+          <img src="bronze1.png" alt="Bronze Sponsor 1">
+        </a>
+        <a class="logo dup" href="#"><img src="bronze1.png" alt=""></a>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="margin:0 0 8px">Sponsor Loch’d In</h3>
+      <p>Support youth creativity in Scotland. Perks include mentoring on-site, demo night shout-outs, and optional résumé opt-ins.</p>
+      <div class="sponsor-cta">
+        <a id="download-prospectus"
+  class="btn ghost"
+  href="assets/LochdIn_Sponsor_Prospectus.pdf?v=1"
+  download="LochdIn_Sponsor_Prospectus.pdf"
+>
+  Download prospectus
+</a>
+
+        <a class="btn primary" href="mailto:ckc40c@gmail.com?subject=Sponsor%20Loch%27d%20In">Email organisers</a>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer role="contentinfo">
   <div class="wrap">
-    <p><strong>Loch’d In</strong> • Edinburgh, Scotland • <span id="dateFooter">Date TBA</span></p>
-    <small>© <span id="year"></span> Loch’d In organisers. Fiscally sponsored by Hack Club (EIN 81-2908499).</small>
+    <p><strong>Loch’d In</strong> • Edinburgh, Scotland • <span id="year"></span></p>
+    <small>© <span id="year2"></span> Loch’d In organisers. Fiscally sponsored by Hack Club (EIN 81-2908499).</small>
   </div>
-</footer> 
+</footer>
 
-<!-- SVG gradient defs for waves -->
-<svg width="0" height="0" style="position:absolute">
-  <defs>
-    <linearGradient id="grad1" x1="0" x2="1">
-      <stop offset="0" stop-color="var(--a)"/><stop offset=".5" stop-color="var(--b)"/><stop offset="1" stop-color="var(--c)"/>
-    </linearGradient>
-    <linearGradient id="grad2" x1="0" x2="1">
-      <stop offset="0" stop-color="var(--d)"/><stop offset=".5" stop-color="var(--c)"/><stop offset="1" stop-color="var(--a)"/>
-    </linearGradient>
-  </defs>
-</svg>
+<!-- Register modal -->
+<dialog id="register-modal" aria-labelledby="register-title">
+  <div class="form-head">
+    <h3 id="register-title">Register for Loch’d In</h3>
+    <button class="btn ghost" id="close-register" aria-label="Close">Close</button>
+  </div>
+  <div class="form-body">
+    <p>Click below to register. You’ll be taken to our official form.</p>
+    <div class="form-actions">
+      <!-- TODO: replace with your Fillout link if different -->
+      <a class="btn primary" href="https://forms.fillout.com/t/hZBiZdZi7Zus" target="_blank" rel="noopener">Open Registration Form</a>
+    </div>
+  </div>
+</dialog>
 
-<script>
-/* ============ Settings ============ */
-const REGISTER_URL = "#"; // TODO: replace with real registration link
-
-/* Year */
-document.getElementById('year').textContent = new Date().getFullYear();
-
-/* Sign up confetti + redirect */
-document.getElementById('signup').addEventListener('click', ()=>{
-  const b = document.getElementById('signup');
-  const r = b.getBoundingClientRect();
-  for(let i=0;i<28;i++){
-    const s=document.createElement('span');
-    const size=6+Math.random()*6;
-    s.style.cssText=`position:absolute;left:${r.left+r.width/2}px;top:${r.top+r.height/2+window.scrollY}px;width:${size}px;height:${size}px;border-radius:50%;background:hsl(${Math.random()*360},90%,60%);pointer-events:none;z-index:9999`;
-    document.body.appendChild(s);
-    let x=0,y=0, vx=(Math.random()*6-3), vy=(Math.random()*-6-2), g=.25, life=60+Math.random()*20;
-    (function anim(){ if(life--<=0){s.remove();return;} vy+=g; x+=vx; y+=vy; s.style.transform=`translate(${x}px,${y}px)`; s.style.opacity=(life/80).toFixed(2); requestAnimationFrame(anim); })();
-  }
-  if(REGISTER_URL && REGISTER_URL!=="#") location.href=REGISTER_URL;
-});
-
-/* Palette switcher */
-const root = document.documentElement;
-document.querySelectorAll('.swatch').forEach(btn=>{
-  btn.addEventListener('click', ()=>{ root.setAttribute('data-theme', btn.dataset.s); localStorage.setItem('lochdin_theme', btn.dataset.s); renderMarks();});
-});
-const saved = localStorage.getItem('lochdin_theme'); if(saved){ root.setAttribute('data-theme', saved); }
-
-/* Reveal on scroll */
-const io = new IntersectionObserver((ents)=>ents.forEach(e=>{
-  if(e.isIntersecting){e.target.classList.add('show'); io.unobserve(e.target);}
-}), {threshold: .15});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-/* ================= Whiteboard markings =================
-   - Fewer, larger marks
-   - Handwritten font
-   - Random rotation [-70°, +70°]
-   - Random scale
-   - No overlaps
-   - Cursor proximity darken
-========================================================= */
-const MARKS = ["<>","{ }","()</>","=>","let","</>","λ","∑","if()","while()","{;}","/* */","</","fn()","return;","const","std::","class{}","<script>"];
-
-let marksEls = [];
-let mouse = { x: -1, y: -1 };
-let rafId = null;
-
-/* Tunables */
-const MAX_ATTEMPTS_PER_MARK = 80; // attempts to find a spot
-const PADDING = 10; // px padding around marks for non-overlap
-
-function renderMarks(){
-  const container = document.getElementById('marks');
-  if(!container) return;
-  container.innerHTML = "";
-  marksEls.length = 0;
-
-  const w = window.innerWidth, h = window.innerHeight;
-  const target = Math.min(36, Math.max(16, Math.floor(w*h/60000))); // fewer marks
-
-  const placedRects = [];
-
-  for(let i=0; i<target; i++){
-    let attempts = 0, placed = false, el;
-
-    while(attempts++ < MAX_ATTEMPTS_PER_MARK && !placed){
-      el = document.createElement('span');
-      el.textContent = MARKS[(Math.random()*MARKS.length)|0];
-
-      const rot = (Math.random()*140 - 70).toFixed(2);
-      const scale = (1.15 + Math.random()*1.0).toFixed(2);
-      const baseOpacity = (Math.random()*0.25 + 0.35);
-
-      el.style.setProperty('--r', rot+'deg');
-      el.style.setProperty('--s', scale);
-      el.style.opacity = baseOpacity.toFixed(2);
-      el.dataset.base = baseOpacity.toString();
-
-      const x = Math.random()*(w - 40) + 20;
-      const y = Math.random()*(h - 40) + 20;
-      el.style.left = `${x}px`;
-      el.style.top  = `${y}px`;
-
-      el.style.visibility = 'hidden';
-      container.appendChild(el);
-
-      const r = el.getBoundingClientRect();
-      const rect = { left:r.left-PADDING, top:r.top-PADDING, right:r.right+PADDING, bottom:r.bottom+PADDING };
-
-      if(!intersectsAny(rect, placedRects)){
-        el.style.visibility = 'visible';
-        placedRects.push(rect);
-        el.dataset.x = ((rect.left + rect.right)/2).toFixed(1);
-        el.dataset.y = ((rect.top  + rect.bottom)/2).toFixed(1);
-        marksEls.push(el);
-        placed = true;
-      } else {
-        el.remove();
-      }
-    }
-    if(!placed) break;
-  }
-}
-
-function intersectsAny(rect, rects){
-  for(const q of rects){
-    if(!(rect.right < q.left || rect.left > q.right || rect.bottom < q.top || rect.top > q.bottom)){
-      return true;
-    }
-  }
-  return false;
-}
-
-function applyProximity(){
-  rafId = null;
-  if(mouse.x < 0) return;
-  const R = Math.max(140, Math.min(300, Math.hypot(window.innerWidth, window.innerHeight)*0.12));
-
-  for(const el of marksEls){
-    const ex = parseFloat(el.dataset.x);
-    const ey = parseFloat(el.dataset.y);
-    const dx = ex - mouse.x;
-    const dy = ey - mouse.y;
-    const dist = Math.hypot(dx, dy);
-
-    const base = parseFloat(el.dataset.base);
-    const boost = Math.max(0, 1 - (dist / R));
-    const op   = Math.min(1, base + boost * 0.35);
-
-    el.style.opacity = op.toFixed(2);
-    el.style.filter = boost > 0 ? `contrast(${1 + boost*0.25}) brightness(${1 - boost*0.08})` : 'none';
-  }
-}
-
-window.addEventListener('pointermove', (e)=>{
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
-  if(rafId == null) rafId = requestAnimationFrame(applyProximity);
-}, {passive:true});
-
-window.addEventListener('resize', ()=>{
-  clearTimeout(window.__mkTo);
-  window.__mkTo = setTimeout(renderMarks, 150);
-});
-
-renderMarks();
-</script>
-</body> 
+<script src="script.js"></script>
+</body>
 </html>
