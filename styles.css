@@ -111,10 +111,10 @@ p{line-height:1.6}
   transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
   background: rgba(255,255,255,0.05);
 }
-.band .logo img {
+.band .logo img { 
   height: var(--logo-h);
   width: auto;
-  object-fit: contain;
+  object-fit: contain; 
   filter: grayscale(25%) contrast(1.05);
 }
 .band .logo:hover img { filter: none; }
