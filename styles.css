@@ -87,18 +87,42 @@ p{line-height:1.6}
 .chip{border:1px solid color-mix(in oklab,var(--b) 40%, transparent); padding:6px 10px; border-radius:999px; color:var(--ink); font-weight:700; background:linear-gradient(90deg,color-mix(in oklab,var(--b) 25%, transparent), transparent 70%)}
 
 /* Marquee sponsors */
-.band{ position:relative; overflow:hidden; border-radius:14px; background:color-mix(in oklab, var(--bg) 88%, #fff 12%); border:1px solid color-mix(in oklab, var(--b) 20%, transparent); margin:10px 0;}
-.band .track{ display:flex; align-items:center; gap:28px; width:max-content; padding:14px 18px; animation: scroll-left var(--speed, 40s) linear infinite;}
-@keyframes scroll-left{ to{ transform: translateX(-50%); } }
-.band.gold   { --logo-h: 56px; --speed: 48s; }
-.band.silver { --logo-h: 44px; --speed: 36s; }
-.band.bronze { --logo-h: 36px; --speed: 28s; }
-.band .logo{ display:grid; place-items:center; padding:6px 10px; border-radius:10px; transition:transform .18s ease, box-shadow .18s ease, filter .18s ease; will-change:transform; }
-.band .logo img{ height:var(--logo-h); width:auto; object-fit:contain; filter:grayscale(25%) contrast(1.05); }
-.band .logo:hover img, .band .logo:focus-visible img{ filter:none }
-.band .logo:hover, .band .logo:focus-visible{ transform:translateY(-2px); box-shadow:0 10px 28px -14px color-mix(in oklab, var(--a) 28%, transparent); outline:none;}
-.band:hover .track, .band:focus-within .track{ animation-play-state:paused }
-@media (prefers-reduced-motion:reduce){ .band .track{ animation:none; flex-wrap:wrap; } }
+/* Sponsor boxes with tiered outlines */
+.band {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  padding: 20px;
+  margin: 12px 0;
+  border-radius: 14px;
+  background: #0f2927; /* light teal backdrop */
+}
+
+.band.gold   { --logo-h: 72px; border: 3px solid #ab9e51; }   /* gold outline */
+.band.silver { --logo-h: 56px; border: 3px solid #a0a0a0; }   /* silver outline */
+.band.bronze { --logo-h: 48px; border: 3px solid #a86d33; }   /* bronze outline */
+
+.band .logo {
+  display: grid;
+  place-items: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  background: rgba(255,255,255,0.05);
+}
+.band .logo img {
+  height: var(--logo-h);
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(25%) contrast(1.05);
+}
+.band .logo:hover img { filter: none; }
+.band .logo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px -14px color-mix(in oklab, var(--a) 28%, transparent);
+}
+
 
 .sponsor-cta{display:flex; gap:10px; flex-wrap:wrap}
 
