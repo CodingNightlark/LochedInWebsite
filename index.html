@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
   <!-- Favicon -->
-<link rel="icon" href="/lochdinlogo-2.ico">
-<!-- matches your background -->
-
+  <link rel="icon" href="/lochdinlogo-2.ico">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Loch'd In — Teen Hackathon in Edinburgh</title>
@@ -15,141 +13,139 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<a href="#top" class="visually-hidden">Skip to content</a>
+<a href="#maincontent" class="visually-hidden">Skip to main content</a>
 
 <!-- Backdrops -->
 <div class="bg-mesh" aria-hidden="true"></div>
-     <!-- optional squiggles -->
-<div class="marks" id="marks" aria-hidden="true"></div>  <!-- whiteboard code marks -->
+<div class="marks" id="marks" aria-hidden="true"></div>
 
 <!-- Fixed top bar -->
 <header class="header" role="banner">
   <div class="nav wrap">
     <div class="brand" aria-label="Loch'd In">
       <img src="lochdinlogo-2.ico" alt="Loch'd In logo" style="height: 40px; width: auto; margin-right: 8px;">
-      <!--
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="var(--a)"/><stop offset="1" stop-color="var(--b)"/></linearGradient></defs>
-        <path d="M8 44c6-10 18-16 28-10 8 4 13 2 20-2-3 6-8 12-16 14-10 2-20-2-30 4-2 1-4-2-2-6Z" fill="url(#g)"/>
-        <circle cx="22" cy="28" r="4" fill="var(--a)"/>
-      </svg>
-    -->
       <span>Loch'd In</span>
     </div>
-    <nav aria-label="Primary">
+
+    <nav aria-label="Primary navigation">
       <a href="#what">What?</a>
       <a href="#free">Free?</a>
       <a href="#who">Who?</a>
       <a href="#schedule">Schedule?</a>
       <a href="#sponsors">Sponsors?</a>
     </nav>
+
     <button class="cta" id="open-register">Register</button>
   </div>
 </header>
 
 <!-- Hero -->
-<div class="wrap hero" id="top">
-  <span class="kicker"><span class="dot"></span> Edinburgh • 10-Hour Teen Hackathon <span class="badge">Beginner-friendly</span></span>
-  <h1>Loch’d In: Myths & Makers</h1>
-  <h3> The first teen hackathon in Scotland in over a decade!</h3>
-  <p><strong> September 27, 2025 • 37a Castle Terrace, Edinburgh EH1 2EL, United Kingdom • Codebase Offices</strong></p>
-  <p>Build a project in a day. Free, beginner-friendly, and open to secondary students.</p>
-  <div class="hero-cta"> 
-    <button class="cta" id="open-register-hero">Register Now</button>
-    <a class="btn ghost" href="#schedule">See schedule</a>
-  </div>
+<div class="wrap" id="top">
+  <section class="hero-card card" aria-labelledby="hero-title">
+    <span class="kicker"><span class="dot" aria-hidden="true"></span> Edinburgh • 10-Hour Teen Hackathon <span class="badge">Beginner-friendly</span></span>
+    <h1 id="hero-title">Loch’d In: Myths & Makers</h1>
+    <h3>The first teen hackathon in Scotland in over a decade!</h3>
+    <p><strong>September 27, 2025 • 37a Castle Terrace, Edinburgh EH1 2EL • CodeBase Offices</strong></p>
+    <p>Build a project in a day. Free, beginner-friendly, and open to secondary students.</p>
+    <div class="hero-cta">
+      <button class="cta" id="open-register-hero">Register Now</button>
+      <a class="btn ghost" href="#schedule">See schedule</a>
+    </div>
+  </section>
 </div>
 
-<main class="wrap" role="main">
-  <section id="what" class="reveal">
-    <h2>What Is Loch’d In?</h2>
-    <p class="card">Loch’d In is a 10-hour <em>hackathon</em> for 13-18 year olds. Team up, make something cool (apps, websites, or games) then show it off on stage. The theme is “Myths & Makers,” but it’s a prompt - not a restriction.</p>
-    <div class="chips" aria-label="Popular build categories">
-      <span class="chip">Apps</span><span class="chip">Games</span><span class="chip">Web</span><span class="chip">Hardware</span><span class="chip">AI</span><span class="chip">Vibe Coding</span>
+<main id="maincontent" class="wrap" role="main">
+  <!-- WHAT -->
+  <section id="what" class="reveal" role="region" aria-labelledby="what-title">
+    <h2 id="what-title" class="visually-hidden">What Is Loch’d In?</h2>
+    <div class="card">
+      <h2>What Is Loch’d In?</h2>
+      <p>Loch’d In is a 10-hour <em>hackathon</em> for 13–18 year olds. Team up, make something cool (apps, websites, or games), then show it off on stage. The theme is “Myths & Makers,” but it’s a prompt — not a restriction.</p>
+    </div>
+    <br>
+  </br>
+    <div class="card" aria-label="Popular build categories">
+      <div class="chips">
+        <span class="chip">Apps</span><span class="chip">Games</span><span class="chip">Web</span>
+        <span class="chip">Hardware</span><span class="chip">AI</span><span class="chip">Vibe Coding</span>
+      </div>
     </div>
   </section>
 
-  <section id="free" class="reveal"> 
-    <h2>Is this all free?</h2>
+  <!-- FREE -->
+  <section id="free" class="reveal" role="region" aria-labelledby="free-title">
     <div class="card">
+      <h2 id="free-title">Is this all free?</h2>
       <p><strong>Absolutely!</strong></p>
-      <p> Thanks to our sponsors we are able to make this event free to attend. </p>
-      <p>Food, drinks, snacks, and swag are provided. </p>
-      <p>Just bring a laptop and charger. </p>
+      <p>Thanks to our sponsors we are able to make this event free to attend.</p>
+      <p>Food, drinks, snacks, and swag are provided.</p>
+      <p>Just bring a laptop and charger.</p>
       <p>Tell us about allergens or dietary requirements during sign-up and we’ll plan accordingly.</p>
     </div>
   </section>
 
-  <section id="who" class="reveal">
-    <h2>Who can attend?</h2>
+  <!-- WHO -->
+  <section id="who" class="reveal" role="region" aria-labelledby="who-title">
     <div class="card">
-      <p>All 13-18 year olds. Coders, designers, artists and vibecodars are all welcome. </p>
-      <p> You can be in teams up to 4 and you will be able to form teams at the event.</p>
+      <h2 id="who-title">Who can attend?</h2>
+      <p>All 13–18 year olds. Coders, designers, artists and vibecoders are all welcome.</p>
+      <p>You can be in teams up to 4 and you will be able to form teams at the event.</p>
     </div>
   </section>
 
-  <section id="schedule" class="reveal">
-    <h2>Saturday — 10 hours of making</h2>
-    <div class="schedule" aria-label="Event schedule">
-      <div class="row"><div class="t">9:00</div><div class="d"><strong>Doors open & Registration.</strong> Meet people and start forming teams.</div></div>
-      <div class="row"><div class="t">9:30</div><div class="d"><strong>Kickoff.</strong> An official start to the day</div></div>
-      <div class="row"><div class="t">9:45</div><div class="d"><strong>Time to Code!</strong></div></div>
-      <div class="row"><div class="t">12:30</div><div class="d"><strong>Lunch break.</strong> Food, drinks, and snacks provided.</div></div>
-      <div class="row"><div class="t">17:00</div><div class="d">Submissions due. </div></div>
-      <div class="row"><div class="t">17:15</div><div class="d"><strong>Dinner break.</strong> Food, drinks, and snacks provided.</div></div>
-      <div class="row"><div class="t">18:00</div><div class="d"><strong>Demos.</strong> 120-second pitch + 60-second Q&amp;A.</div></div>
-      <div class="row"><div class="t">18:45</div><div class="d"><strong>Awards & wrap.</strong> Group photo & goodbyes.</div></div>
+  <!-- SCHEDULE -->
+  <section id="schedule" class="reveal" role="region" aria-labelledby="schedule-title">
+    <div class="card">
+      <h2 id="schedule-title">Saturday — 10 hours of making</h2>
+      <div class="schedule" aria-label="Event schedule">
+        <div class="row"><div class="t">9:00</div><div class="d"><strong>Doors open & Registration.</strong> Meet people and start forming teams.</div></div>
+        <div class="row"><div class="t">9:30</div><div class="d"><strong>Kickoff.</strong> An official start to the day.</div></div>
+        <div class="row"><div class="t">9:45</div><div class="d"><strong>Time to Code!</strong></div></div>
+        <div class="row"><div class="t">12:30</div><div class="d"><strong>Lunch break.</strong> Food, drinks, and snacks provided.</div></div>
+        <div class="row"><div class="t">17:00</div><div class="d">Submissions due.</div></div>
+        <div class="row"><div class="t">17:15</div><div class="d"><strong>Dinner break.</strong> Food, drinks, and snacks provided.</div></div>
+        <div class="row"><div class="t">18:00</div><div class="d"><strong>Demos.</strong> 120-second pitch + 60-second Q&amp;A.</div></div>
+        <div class="row"><div class="t">18:45</div><div class="d"><strong>Awards & wrap.</strong> Group photo & goodbyes.</div></div>
+      </div>
     </div>
   </section>
 
-  <!-- Sponsors marquee-->
-  <section id="sponsors" class="reveal" aria-labelledby="sponsors-title">
-  <h2 id="sponsors-title">Sponsors</h2>
-  <p class="muted">Thank you to our partners.</p>
+  <!-- SPONSORS -->
+  <section id="sponsors" class="reveal" role="region" aria-labelledby="sponsors-title">
+    <div class="card">
+      <h2 id="sponsors-title">Sponsors</h2>
+      <p class="muted">Thank you to our partners.</p>
 
-  <!-- GOLD -->
-  <div class="band gold" aria-label="Gold sponsors">
-    <a class="logo" href="https://base44.com" target="_blank" rel="noopener" aria-label="Base44 (Gold)">
-      <img src="base44.png" alt="Base44 logo">
-    </a>
-    <a class="logo" href="https://thisiscodebase.com/" target="_blank" rel="noopener" aria-label="Gold Sponsor 2">
-      <img src="Codebase.png" alt="Gold Sponsor 2">
-    </a>
-  </div>
- 
-  <!-- SILVER -->
-  <div class="band silver" aria-label="Silver sponsors">
-    <a class = "logo" href="https://www.hackclub.com/" target="_blank" rel="noopener" aria-label="Hack Club (Silver)">
-      <img src="HackClub.png" alt="Hack Club logo">
-    <!--
-    <a class="logo" href="https://www.bobbai.co/" target="_blank" rel="noopener" aria-label="Silver Sponsor 1">
-      <img src="BobbAI.png" alt="Silver Sponsor 1">
-    </a>
-  -->
-  </div>
+      <!-- GOLD -->
+      <div class="band gold" role="group" aria-label="Gold sponsors">
+        <a class="logo" href="https://base44.com" target="_blank" rel="noopener" aria-label="Base44 (Gold)">
+          <img src="base44.png" alt="Base44 logo">
+        </a>
+        <a class="logo" href="https://thisiscodebase.com/" target="_blank" rel="noopener" aria-label="CodeBase (Gold)">
+          <img src="Codebase.png" alt="CodeBase logo">
+        </a>
+      </div>
 
-  <!-- BRONZE -->
-  <div class="band bronze" aria-label="Bronze sponsors">
-    <!--
-    <a class="logo" href="https://www.raspberrypi.org/" target="_blank" rel="noopener" aria-label="Bronze Sponsor 1">
-      <img src="RaspberryPi.png" alt="Bronze Sponsor 1">
-    </a>
-  -->
-  </div>
-</section>
+      <!-- SILVER -->
+      <div class="band silver" role="group" aria-label="Silver sponsors">
+        <a class="logo" href="https://www.hackclub.com/" target="_blank" rel="noopener" aria-label="Hack Club (Silver)">
+          <img src="HackClub.png" alt="Hack Club logo">
+        </a>
+        <a class="logo" href="https://www.expert-sleepers.co.uk/" target="_blank" rel="noopener" aria-label="SparkFun (Silver)">
+          <img src="expert_sleepers_fat_notagline.svg" alt="Expert Sleepers logo">
+      </div>
 
-<h2> Do you want to sponsor Loch'd In?</h2>
+      <!-- BRONZE -->
+      <div class="band bronze" role="group" aria-label="Bronze sponsors">
+        <!-- Add bronze sponsors here -->
+      </div>
+    </div>
+
     <div class="card" style="margin-top:16px">
+      <h2>Do you want to sponsor Loch'd In?</h2>
       <p>Support youth creativity in Scotland. Perks include mentoring on-site, opening ceremony shoutouts, and visibility through this website and swag.</p>
       <div class="sponsor-cta">
-        <a id="download-prospectus"
-  class="btn ghost"
-  href="assets/LochdIn_Sponsor_Prospectus.pdf?v=1"
-  download="LochdIn_Sponsor_Prospectus.pdf"
->
-  Download prospectus
-</a>
-
+        <a id="download-prospectus" class="btn ghost" href="assets/LochdIn_Sponsor_Prospectus.pdf?v=1" download="LochdIn_Sponsor_Prospectus.pdf">Download prospectus</a>
         <a class="btn primary" href="mailto:ckc24v@gmail.com?subject=Sponsor%20Loch%27d%20In">Email organisers</a>
       </div>
     </div>
@@ -158,8 +154,10 @@
 
 <footer role="contentinfo">
   <div class="wrap">
-    <p><strong>Loch’d In</strong> • Edinburgh, Scotland • <span id="year"></span></p>
-    <small>© <span id="year2"></span> Loch’d In organisers. Fiscally sponsored by Hack Club (EIN 81-2908499).</small>
+    <div class="card">
+      <p><strong>Loch’d In</strong> • Edinburgh, Scotland • <span id="year"></span></p>
+      <small>© <span id="year2"></span> Loch’d In organisers. Fiscally sponsored by Hack Club (EIN 81-2908499).</small>
+    </div>
   </div>
 </footer>
 
@@ -172,7 +170,6 @@
   <div class="form-body">
     <p>Click below to register. You’ll be taken to our official form.</p>
     <div class="form-actions">
-      <!-- TODO: replace with your Fillout link if different -->
       <a class="btn primary" href="https://forms.fillout.com/t/hZBiZdZi7Zus" target="_blank" rel="noopener">Open Registration Form</a>
     </div>
   </div>
