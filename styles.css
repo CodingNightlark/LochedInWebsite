@@ -156,3 +156,55 @@ a:focus-visible, button:focus-visible {
   .schedule .row{grid-template-columns:1fr; gap:8px}
   .schedule .t{text-align:right}
 }
+
+/* === Core readability === */
+html { font-size: 100%; }                 /* 16px base */
+body { font-size: 1.125rem; line-height: 1.6; }  /* 18px body, AA-friendly */
+
+p, li { max-width: 70ch; }                /* comfortable measure in cards */
+
+/* Links must not rely on color only */
+a { text-decoration: underline; text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+
+/* Visible keyboard focus, consistent */
+:focus-visible {
+  outline: 3px solid var(--b);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Buttons should also show focus clearly even without mouse */
+button:focus-visible, .btn:focus-visible, .cta:focus-visible { outline: 3px solid var(--a); }
+
+/* Contrast tweaks: card/badge/chip on dark backgrounds */
+.card { background: color-mix(in oklab, var(--card) 85%, #000 15%); }
+.badge { color: #0a0f10; }                 /* ensure 4.5:1 against gradient */
+.chip { color: var(--ink); border-color: color-mix(in oklab, var(--b) 60%, #000 0%); }
+
+/* Nav: indicate current page/section (used via aria-current) */
+nav a[aria-current="true"] {
+  text-decoration: none;
+  border-bottom: 3px solid var(--b);
+}
+
+/* Sponsor boxes (static, tier outlines kept) */
+.band { background:#114d48; }
+.band.gold   { border:3px solid #ffd700; }
+.band.silver { border:3px solid #c0c0c0; }
+.band.bronze { border:3px solid #cd7f32; }
+
+/* Modal: prevent underlying scroll while open (supported by modern browsers) */
+:where(html:has(dialog[open])) { overflow: hidden; }
+
+/* Reduced motion: also fade out decorative marks if requested */
+@media (prefers-reduced-motion: reduce) {
+  .marks { display: none; }
+  .bg-mesh { animation: none; }
+}
+
+/* Utility: visually hidden but focusable announcement text */
+.sr-only {
+  position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+  clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}

@@ -1,52 +1,121 @@
 (() => {
   const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Year (both spots)
-  const y = String(new Date().getFullYear());
-  const y1 = document.getElementById('year');  if (y1) y1.textContent = y;
-  const y2 = document.getElementById('year2'); if (y2) y2.textContent = y;
+  /* ===== Year (both spots) ===== */
+  const yr = String(new Date().getFullYear());
+  const y1 = document.getElementById('year');  if (y1) y1.textContent = yr;
+  const y2 = document.getElementById('year2'); if (y2) y2.textContent = yr;
 
-  /* Reveal on scroll */
+  /* ===== Reveal on scroll ===== */
   const io = new IntersectionObserver((ents)=>ents.forEach(e=>{
     if (e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); }
   }), {threshold:.15});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-  /* Register modal (guarded) */
-  const regModal = document.getElementById('register-modal');
-  if (regModal) {
-    ['open-register','open-register-hero']
-      .map(id=>document.getElementById(id))
-      .filter(Boolean)
-      .forEach(btn=>btn.addEventListener('click', ()=>regModal.showModal()));
-    document.getElementById('close-register')?.addEventListener('click', ()=>regModal.close());
+  /* ===== Nav aria-current as sections enter view ===== */
+  (() => {
+    const sectionIds = ['what','free','who','schedule','sponsors'];
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    const links = Array.from(document.querySelectorAll('nav a'));
+    const ioNav = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          links.forEach(a => a.removeAttribute('aria-current'));
+          const current = links.find(a => a.getAttribute('href') === `#${id}`);
+          if (current) current.setAttribute('aria-current','true');
+        }
+      });
+    }, { rootMargin: "-40% 0px -50% 0px", threshold: 0 });
+    sections.forEach(sec => ioNav.observe(sec));
+  })();
+
+  /* ===== Register modal (focus trap + Esc + return focus) ===== */
+  (() => {
+    const dlg = document.getElementById('register-modal');
+    if (!dlg) return;
+    const openers = ['open-register','open-register-hero']
+      .map(id=>document.getElementById(id)).filter(Boolean);
+    const closeBtn = document.getElementById('close-register');
+    let lastFocused = null;
+
+    function focusables(root){
+      return Array.from(root.querySelectorAll(
+        'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      )).filter(el => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden'));
+    }
+
+    openers.forEach(btn => btn.addEventListener('click', () => {
+      lastFocused = document.activeElement;
+      dlg.showModal();
+      const f = focusables(dlg);
+      (f[0] || closeBtn)?.focus();
+    }));
+
+    closeBtn?.addEventListener('click', () => dlg.close());
+
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); dlg.close(); return; }
+      if (e.key === 'Tab') {
+        const f = focusables(dlg);
+        if (!f.length) return;
+        const first = f[0], last = f[f.length-1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+
+    dlg.addEventListener('close', () => { lastFocused?.focus(); });
+  })();
+
+  /* ===== Download prospectus (force download if host serves inline) ===== */
+  const dl = document.getElementById('download-prospectus');
+  if (dl) {
+    dl.addEventListener('click', async (e) => {
+      // If the native download works, remove this block.
+      e.preventDefault();
+      const url = dl.getAttribute('href');
+      try {
+        const r = await fetch(url);
+        const blob = await r.blob();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'LochdIn_Sponsor_Prospectus.pdf';
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(a.href);
+        a.remove();
+      } catch (err) {
+        console.error('Download failed', err);
+        location.href = url; // fallback
+      }
+    });
   }
 
-  const dl = document.getElementById('download-prospectus');
-if (dl) {
-  dl.addEventListener('click', async (e) => {
-    // If the simple download attr already works, remove this block.
-    e.preventDefault();
-    const url = dl.getAttribute('href');
-    try {
-      const r = await fetch(url);
-      const blob = await r.blob();
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'LochdIn_Sponsor_Prospectus.pdf';
-      document.body.appendChild(a);
-      a.click();
-      URL.revokeObjectURL(a.href);
-      a.remove();
-    } catch (err) {
-      console.error('Download failed', err);
-      // Fallback: just navigate to the file
-      location.href = url;
-    }
-  });
-}
+  /* ===== Effects toggle (background mesh + whiteboard marks) ===== */
+  (() => {
+    const btn = document.getElementById('toggle-effects');
+    if (!btn) return;
+    const mesh = document.querySelector('.bg-mesh');
+    const marks = document.getElementById('marks');
 
-  /* Whiteboard code marks (<> {} etc) */
+    function setState(on){
+      btn.setAttribute('aria-pressed', String(on));
+      if (mesh) mesh.style.display = on ? '' : 'none';
+      if (marks) marks.style.display = on ? '' : 'none';
+      localStorage.setItem('effects_on', on ? '1' : '0');
+    }
+    const saved = localStorage.getItem('effects_on');
+    const startOn = saved !== '0';
+    setState(startOn);
+
+    btn.addEventListener('click', () => {
+      const on = btn.getAttribute('aria-pressed') !== 'true';
+      setState(on);
+    });
+  })();
+
+  /* ===== Whiteboard code marks (<> {} etc) ===== */
   const MARKS = ["<>","{ }","()</>","=>","let","</>","λ","∑","if()","while()","{;}","/* */","</","fn()","return;","const","std::","class{}","<script>"];
   const marksHost = document.getElementById('marks');
   let marksEls = [], mouse = { x:-1, y:-1 }, rafId = null;
@@ -116,7 +185,7 @@ if (dl) {
   addEventListener('pointermove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; if(!rafId) rafId=requestAnimationFrame(proxDarken); }, {passive:true});
   addEventListener('resize', ()=>{ clearTimeout(window.__mkMarks); window.__mkMarks = setTimeout(renderMarks, 150); });
 
-  /* Optional canvas squiggles (behind everything) */
+  /* ===== Optional canvas squiggles (behind everything) ===== */
   const canvas = document.getElementById('scribbles');
   if (canvas && canvas.getContext && !prefersReduced){
     const ctx = canvas.getContext('2d');
@@ -138,7 +207,8 @@ if (dl) {
 
     function colFor(hue){
       const cs = getComputedStyle(document.documentElement);
-      const map = [cs.getPropertyValue('--a'), cs.getPropertyValue('--b'), cs.getPropertyValue('--c'), cs.getPropertyValue('--d')].map(s=>s.trim());
+      const map = [cs.getPropertyValue('--a'), cs.getPropertyValue('--b'),
+                   cs.getPropertyValue('--c'), cs.getPropertyValue('--d')].map(s=>s.trim());
       return map[hue % map.length] || '#22d3ee';
     }
 
@@ -153,7 +223,6 @@ if (dl) {
         L.vy += (Math.random()*0.4-0.2);
         L.vx *= 0.98; L.vy *= 0.98;
         L.x += L.vx; L.y += L.vy;
-
         if (L.x<0) L.x+=w; if (L.x>w) L.x-=w;
         if (L.y<0) L.y+=h; if (L.y>h) L.y-=h;
 
