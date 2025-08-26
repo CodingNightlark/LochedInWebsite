@@ -68,7 +68,7 @@ h1{font-family:Cinzel,serif; font-weight:800; line-height:1.02; margin:6px 0 10p
 .btn.ghost{color:var(--ink); background:#0e1515; border:1px solid color-mix(in oklab, var(--a) 25%, transparent)}
 
 section{padding:40px 0; border-top:1px solid var(--line)}
-h2{font-family:Cinzel,serif; font-size:clamp(24px,3.6vw,38px); margin:0 0 12px; letter-spacing:.2px; background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+h2{font-family:Cinzel,serif; font-size:clamp(24px,3.6vw,36px); margin:0 0 12px; letter-spacing:.2px; background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent;}
 h3{font-family:Cinzel,serif; font-size:clamp(20px,2.8vw,32px); margin:0 0 12px; letter-spacing:.2px; background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent;}
 p{line-height:1.6}
 .card{
