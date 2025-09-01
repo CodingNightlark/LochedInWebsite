@@ -4,15 +4,21 @@
   --card:#0a1212; --line:#0f1d1a; --halo:rgba(110,243,214,.32);
   --mark:rgba(255,255,255,.20); /* made stronger so marks are visible */
   --max:1080px;
+  --header-h: 72px;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%}
+
 body{
-  margin:0; padding-top:72px;
-  color:var(--ink); font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  background:var(--bg); overflow-x:hidden;
+  margin:0; 
+  padding-top:calc(var(--header-h) + env(safe-area-inset-top, 0px));
+  color:var(--ink); 
+  font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg); 
+  overflow-x:hidden;
 }
+
 a{color:var(--a)} a:hover{text-decoration:underline}
 .wrap{max-width:var(--max); margin:0 auto; padding:0 18px}
 .visually-hidden{position:absolute!important;width:1px;height:1px;margin:-1px;border:0;padding:0;clip:rect(0 0 0 0);overflow:hidden}
@@ -28,7 +34,14 @@ a{color:var(--a)} a:hover{text-decoration:underline}
   animation: drift 28s ease-in-out infinite alternate;
 }
 @keyframes drift{0%{transform:translateY(-2%) rotate(.6deg)}100%{transform:translateY(6%) rotate(-.6deg)}}
-@media (prefers-reduced-motion:reduce){ .bg-mesh{animation:none} }
+@media (max-width: 520px){ 
+  .bg-mesh{animation:none} 
+    .nav { padding: 10px 14px; }
+  .brand span { font-size: 1rem; }
+}
+@supports (padding-top: env(safe-area-inset-top)) {
+  body { padding-top: calc(var(--header-h) + env(safe-area-inset-top)); }
+}
 
 #scribbles{ position:fixed; inset:0; z-index:-5; pointer-events:none; opacity:.25; }
 
