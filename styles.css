@@ -202,7 +202,7 @@ nav a[aria-current="true"] {
 }
 
 /* Sponsor boxes (static, tier outlines kept) */
-.band { background:#114d48; }
+.band { background:#528a86; }
 .band.gold   { border:3px solid #ffd700; }
 .band.silver { border:3px solid #c0c0c0; }
 .band.bronze { border:3px solid #cd7f32; }
